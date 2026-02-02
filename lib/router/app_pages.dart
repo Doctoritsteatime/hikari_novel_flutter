@@ -30,7 +30,11 @@ class AppRoutes {
     CustomGetPage(name: RoutePath.photo, page: () => PhotoPage()),
     CustomGetPage(name: RoutePath.reader, page: () => ReaderPage()),
     CustomGetPage(name: RoutePath.welcome, page: () => WelcomePage()),
-    CustomGetPage(name: RoutePath.readerSetting, page: () => ReaderSettingPage()),
+    CustomGetPage(name: RoutePath.setting, page: () => SettingPage()),
+    CustomGetPage(
+      name: RoutePath.readerSetting,
+      page: () => ReaderSettingPage(),
+    ),
   ];
 
   static Route<dynamic>? subRoutePages(RouteSettings settings) {
@@ -40,25 +44,40 @@ class AppRoutes {
       case RoutePath.novelDetail:
         {
           var args = settings.arguments as String;
-          return GetPageRoute(settings: settings, page: () => NovelDetailPage(aid: args));
+          return GetPageRoute(
+            settings: settings,
+            page: () => NovelDetailPage(aid: args),
+          );
         }
       case RoutePath.comment:
         {
           var args = settings.arguments as String;
-          return GetPageRoute(settings: settings, page: () => CommentPage(aid: args));
+          return GetPageRoute(
+            settings: settings,
+            page: () => CommentPage(aid: args),
+          );
         }
       case RoutePath.reply:
         {
           var args = settings.arguments as List<String>;
-          return GetPageRoute(settings: settings, page: () => ReplyPage(aid: args[0], rid: args[1]));
+          return GetPageRoute(
+            settings: settings,
+            page: () => ReplyPage(aid: args[0], rid: args[1]),
+          );
         }
       case RoutePath.userBookshelf:
         {
           var args = settings.arguments as String;
-          return GetPageRoute(settings: settings, page: () => UserBookshelfPage(uid: args));
+          return GetPageRoute(
+            settings: settings,
+            page: () => UserBookshelfPage(uid: args),
+          );
         }
       case RoutePath.browsingHistory:
-        return GetPageRoute(settings: settings, page: () => BrowsingHistoryPage());
+        return GetPageRoute(
+          settings: settings,
+          page: () => BrowsingHistoryPage(),
+        );
       case RoutePath.userInfo:
         return GetPageRoute(settings: settings, page: () => UserInfoPage());
       case RoutePath.about:
@@ -68,12 +87,18 @@ class AppRoutes {
       case RoutePath.search:
         {
           var args = settings.arguments as String?;
-          return GetPageRoute(settings: settings, page: () => SearchPage(author: args));
+          return GetPageRoute(
+            settings: settings,
+            page: () => SearchPage(author: args),
+          );
         }
       case RoutePath.cacheQueue:
         return GetPageRoute(settings: settings, page: () => CacheQueuePage());
       case RoutePath.devTools:
-        return GetPageRoute(settings: settings, page: () => const DevToolsPage());
+        return GetPageRoute(
+          settings: settings,
+          page: () => const DevToolsPage(),
+        );
       default:
         return null;
     }
@@ -81,13 +106,17 @@ class AppRoutes {
 }
 
 class CustomGetPage extends GetPage<dynamic> {
-  CustomGetPage({required super.name, required super.page, this.fullscreen = false, super.transitionDuration})
-    : super(
-        curve: Curves.linear,
-        transition: Transition.native,
-        showCupertinoParallax: false,
-        popGesture: false,
-        fullscreenDialog: fullscreen != null && fullscreen,
-      );
+  CustomGetPage({
+    required super.name,
+    required super.page,
+    this.fullscreen = false,
+    super.transitionDuration,
+  }) : super(
+         curve: Curves.linear,
+         transition: Transition.native,
+         showCupertinoParallax: false,
+         popGesture: false,
+         fullscreenDialog: fullscreen != null && fullscreen,
+       );
   late final bool? fullscreen;
 }

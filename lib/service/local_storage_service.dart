@@ -57,7 +57,9 @@ class LocalStorageService extends GetxService {
       kReaderTtsRate = "readerTtsRate",
       kDevModeEnabled = "devModeEnabled",
       kReaderTtsPitch = "readerTtsPitch",
-      kReaderTtsVolume = "readerTtsVolume";
+      kReaderTtsVolume = "readerTtsVolume",
+      kUseFlareSolverr = 'use_flaresolverr',
+      kFlareSolverrUrl = 'flaresolverr_url';
 
   Future<void> init() async {
     final Directory dir = await getApplicationSupportDirectory();
@@ -77,137 +79,200 @@ class LocalStorageService extends GetxService {
 
   UserInfo? getUserInfo() => _setting.get(kUserInfo);
 
-  void setIsAutoCheckUpdate(bool enabled) => _setting.put(kIsAutoCheckUpdate, enabled);
+  void setIsAutoCheckUpdate(bool enabled) =>
+      _setting.put(kIsAutoCheckUpdate, enabled);
 
-  bool getIsAutoCheckUpdate() => _setting.get(kIsAutoCheckUpdate, defaultValue: true);
+  bool getIsAutoCheckUpdate() =>
+      _setting.get(kIsAutoCheckUpdate, defaultValue: true);
 
   void setThemeMode(ThemeMode tm) => _setting.put(kThemeMode, tm.index);
 
-  ThemeMode getThemeMode() => ThemeMode.values[_setting.get(kThemeMode, defaultValue: ThemeMode.system.index)];
+  ThemeMode getThemeMode() =>
+      ThemeMode.values[_setting.get(
+        kThemeMode,
+        defaultValue: ThemeMode.system.index,
+      )];
 
-  void setCustomColor(Color color) => _setting.put(kCustomColor, color.toARGB32());
+  void setCustomColor(Color color) =>
+      _setting.put(kCustomColor, color.toARGB32());
 
-  Color getCustomColor() => Color(_setting.get(kCustomColor, defaultValue: Colors.blue.toARGB32()));
+  Color getCustomColor() =>
+      Color(_setting.get(kCustomColor, defaultValue: Colors.blue.toARGB32()));
 
-  void setIsDynamicColor(bool enabled) => _setting.put(kIsDynamicColor, enabled);
+  void setIsDynamicColor(bool enabled) =>
+      _setting.put(kIsDynamicColor, enabled);
 
   bool getIsDynamicColor() => _setting.get(kIsDynamicColor, defaultValue: true);
 
-  void setIsRelativeTime(bool enabled) => _setting.put(kIsRelativeTime, enabled);
+  void setIsRelativeTime(bool enabled) =>
+      _setting.put(kIsRelativeTime, enabled);
 
-  bool getIsRelativeTime() => _setting.get(kIsRelativeTime, defaultValue: false);
+  bool getIsRelativeTime() =>
+      _setting.get(kIsRelativeTime, defaultValue: false);
 
   void setLanguage(Language value) => _setting.put(kLanguage, value.index);
 
-  Language getLanguage() => Language.values[_setting.get(kLanguage, defaultValue: Language.followSystem.index)];
+  Language getLanguage() =>
+      Language.values[_setting.get(
+        kLanguage,
+        defaultValue: Language.followSystem.index,
+      )];
 
-  void setWenku8Node(Wenku8Node value) => _setting.put(kWenku8Node, value.index);
+  void setWenku8Node(Wenku8Node value) =>
+      _setting.put(kWenku8Node, value.index);
 
-  Wenku8Node getWenku8Node() => Wenku8Node.values[_setting.get(kWenku8Node, defaultValue: Wenku8Node.wwwWenku8Net.index)];
+  Wenku8Node getWenku8Node() =>
+      Wenku8Node.values[_setting.get(
+        kWenku8Node,
+        defaultValue: Wenku8Node.wwwWenku8Net.index,
+      )];
 
-  ReaderDirection getReaderDirection() => ReaderDirection.values[_reader.get(kReaderDirection, defaultValue: ReaderDirection.upToDown.index)];
+  ReaderDirection getReaderDirection() =>
+      ReaderDirection.values[_reader.get(
+        kReaderDirection,
+        defaultValue: ReaderDirection.upToDown.index,
+      )];
 
-  void setReaderDirection(ReaderDirection value) => _reader.put(kReaderDirection, value.index);
+  void setReaderDirection(ReaderDirection value) =>
+      _reader.put(kReaderDirection, value.index);
 
-  double getReaderFontSize() => _reader.get(kReaderFontSize, defaultValue: 16.0);
+  double getReaderFontSize() =>
+      _reader.get(kReaderFontSize, defaultValue: 16.0);
 
   void setReaderFontSize(double value) => _reader.put(kReaderFontSize, value);
 
-  double getReaderLineSpacing() => _reader.get(kReaderLineSpacing, defaultValue: 1.5);
+  double getReaderLineSpacing() =>
+      _reader.get(kReaderLineSpacing, defaultValue: 1.5);
 
-  void setReaderLineSpacing(double value) => _reader.put(kReaderLineSpacing, value);
+  void setReaderLineSpacing(double value) =>
+      _reader.put(kReaderLineSpacing, value);
 
   bool getReaderWakeLock() => _reader.get(kReaderWakeLock, defaultValue: false);
 
   void setReaderWakeLock(bool enabled) => _reader.put(kReaderWakeLock, enabled);
 
-  double getReaderLeftMargin() => _reader.get(kReaderLeftMargin, defaultValue: 20.0);
+  double getReaderLeftMargin() =>
+      _reader.get(kReaderLeftMargin, defaultValue: 20.0);
 
-  void setReaderLeftMargin(double value) => _reader.put(kReaderLeftMargin, value);
+  void setReaderLeftMargin(double value) =>
+      _reader.put(kReaderLeftMargin, value);
 
-  double getReaderTopMargin() => _reader.get(kReaderTopMargin, defaultValue: 20.0);
+  double getReaderTopMargin() =>
+      _reader.get(kReaderTopMargin, defaultValue: 20.0);
 
   void setReaderTopMargin(double value) => _reader.put(kReaderTopMargin, value);
 
-  double getReaderRightMargin() => _reader.get(kReaderRightMargin, defaultValue: 20.0);
+  double getReaderRightMargin() =>
+      _reader.get(kReaderRightMargin, defaultValue: 20.0);
 
-  void setReaderRightMargin(double value) => _reader.put(kReaderRightMargin, value);
+  void setReaderRightMargin(double value) =>
+      _reader.put(kReaderRightMargin, value);
 
-  double getReaderBottomMargin() => _reader.get(kReaderBottomMargin, defaultValue: 20.0);
+  double getReaderBottomMargin() =>
+      _reader.get(kReaderBottomMargin, defaultValue: 20.0);
 
-  void setReaderBottomMargin(double value) => _reader.put(kReaderBottomMargin, value);
+  void setReaderBottomMargin(double value) =>
+      _reader.put(kReaderBottomMargin, value);
 
-  DualPageMode getReaderDualPageMode() => DualPageMode.values[_reader.get(kReaderDualPageMode, defaultValue: DualPageMode.auto.index)];
+  DualPageMode getReaderDualPageMode() =>
+      DualPageMode.values[_reader.get(
+        kReaderDualPageMode,
+        defaultValue: DualPageMode.auto.index,
+      )];
 
-  void setReaderDualPageMode(DualPageMode value) => _reader.put(kReaderDualPageMode, value.index);
+  void setReaderDualPageMode(DualPageMode value) =>
+      _reader.put(kReaderDualPageMode, value.index);
 
-  double getReaderDualPageSpacing() => _reader.get(kReaderDualPageSpacing, defaultValue: 20.0);
+  double getReaderDualPageSpacing() =>
+      _reader.get(kReaderDualPageSpacing, defaultValue: 20.0);
 
-  void setReaderDualPageSpacing(double value) => _reader.put(kReaderDualPageSpacing, value);
+  void setReaderDualPageSpacing(double value) =>
+      _reader.put(kReaderDualPageSpacing, value);
 
-  bool getReaderImmersionMode() => _reader.get(kReaderImmersionMode, defaultValue: false);
+  bool getReaderImmersionMode() =>
+      _reader.get(kReaderImmersionMode, defaultValue: false);
 
-  void setReaderImmersionMode(bool enabled) => _reader.put(kReaderImmersionMode, enabled);
+  void setReaderImmersionMode(bool enabled) =>
+      _reader.put(kReaderImmersionMode, enabled);
 
-  bool getReaderStatusBar() => _reader.get(kReaderStatusBar, defaultValue: true);
+  bool getReaderStatusBar() =>
+      _reader.get(kReaderStatusBar, defaultValue: true);
 
-  void setReaderStatusBar(bool enabled) => _reader.put(kReaderStatusBar, enabled);
+  void setReaderStatusBar(bool enabled) =>
+      _reader.put(kReaderStatusBar, enabled);
 
-  String? getReaderTextFamily() => _reader.get(kReaderTextFamily, defaultValue: null);
+  String? getReaderTextFamily() =>
+      _reader.get(kReaderTextFamily, defaultValue: null);
 
-  void setReaderTextFamily(String? value) => _reader.put(kReaderTextFamily, value);
+  void setReaderTextFamily(String? value) =>
+      _reader.put(kReaderTextFamily, value);
 
-  String? getReaderTextStyleFilePath() => _reader.get(kReaderTextStyleFilePath, defaultValue: null);
+  String? getReaderTextStyleFilePath() =>
+      _reader.get(kReaderTextStyleFilePath, defaultValue: null);
 
-  void setReaderTextStyleFilePath(String? value) => _reader.put(kReaderTextStyleFilePath, value);
+  void setReaderTextStyleFilePath(String? value) =>
+      _reader.put(kReaderTextStyleFilePath, value);
 
-  bool getReaderPageTurningAnimation() => _reader.get(kReaderPageTurningAnimation, defaultValue: true);
+  bool getReaderPageTurningAnimation() =>
+      _reader.get(kReaderPageTurningAnimation, defaultValue: true);
 
-  void setReaderPageTurningAnimation(bool enabled) => _reader.put(kReaderPageTurningAnimation, enabled);
+  void setReaderPageTurningAnimation(bool enabled) =>
+      _reader.put(kReaderPageTurningAnimation, enabled);
 
   Color? getReaderDayBgColor() {
     final result = _reader.get(kReaderDayBgColor, defaultValue: null);
     return result == null ? null : Color(result);
   }
 
-  void setReaderDayBgColor(Color? value) => _reader.put(kReaderDayBgColor, value?.toARGB32());
+  void setReaderDayBgColor(Color? value) =>
+      _reader.put(kReaderDayBgColor, value?.toARGB32());
 
   Color? getReaderDayTextColor() {
     final result = _reader.get(kReaderDayTextColor, defaultValue: null);
     return result == null ? null : Color(result);
   }
 
-  void setReaderDayTextColor(Color? value) => _reader.put(kReaderDayTextColor, value?.toARGB32());
+  void setReaderDayTextColor(Color? value) =>
+      _reader.put(kReaderDayTextColor, value?.toARGB32());
 
   Color? getReaderNightBgColor() {
     final result = _reader.get(kReaderNightBgColor, defaultValue: null);
     return result == null ? null : Color(result);
   }
 
-  void setReaderNightBgColor(Color? value) => _reader.put(kReaderNightBgColor, value?.toARGB32());
+  void setReaderNightBgColor(Color? value) =>
+      _reader.put(kReaderNightBgColor, value?.toARGB32());
 
   Color? getReaderNightTextColor() {
     final result = _reader.get(kReaderNightTextColor, defaultValue: null);
     return result == null ? null : Color(result);
   }
 
-  void setReaderNightTextColor(Color? value) => _reader.put(kReaderNightTextColor, value?.toARGB32());
+  void setReaderNightTextColor(Color? value) =>
+      _reader.put(kReaderNightTextColor, value?.toARGB32());
 
-  String? getReaderDayBgImage() => _reader.get(kReaderDayBgImage, defaultValue: null);
+  String? getReaderDayBgImage() =>
+      _reader.get(kReaderDayBgImage, defaultValue: null);
 
-  void setReaderDayBgImage(String? value) => _reader.put(kReaderDayBgImage, value);
+  void setReaderDayBgImage(String? value) =>
+      _reader.put(kReaderDayBgImage, value);
 
-  String? getReaderNightBgImage() => _reader.get(kReaderDayBgImage, defaultValue: null);
+  String? getReaderNightBgImage() =>
+      _reader.get(kReaderDayBgImage, defaultValue: null);
 
-  void setReaderNightBgImage(String? value) => _reader.put(kReaderDayBgImage, value);
+  void setReaderNightBgImage(String? value) =>
+      _reader.put(kReaderDayBgImage, value);
 
-  bool getReaderTtsEnabled() => _reader.get(kReaderTtsEnabled, defaultValue: false);
+  bool getReaderTtsEnabled() =>
+      _reader.get(kReaderTtsEnabled, defaultValue: false);
 
-  void setReaderTtsEnabled(bool enabled) => _reader.put(kReaderTtsEnabled, enabled);
+  void setReaderTtsEnabled(bool enabled) =>
+      _reader.put(kReaderTtsEnabled, enabled);
 
   String? getReaderTtsEngine() => _reader.get(kReaderTtsEngine);
 
-  void setReaderTtsEngine(String? value) => _reader.put(kReaderTtsEngine, value);
+  void setReaderTtsEngine(String? value) =>
+      _reader.put(kReaderTtsEngine, value);
 
   Map<String, String>? getReaderTtsVoice() {
     final v = _reader.get(kReaderTtsVoice);
@@ -217,7 +282,8 @@ class LocalStorageService extends GetxService {
     return null;
   }
 
-  void setReaderTtsVoice(Map<String, String>? value) => _reader.put(kReaderTtsVoice, value);
+  void setReaderTtsVoice(Map<String, String>? value) =>
+      _reader.put(kReaderTtsVoice, value);
 
   double getReaderTtsRate() => _reader.get(kReaderTtsRate, defaultValue: 0.5);
 
@@ -227,12 +293,43 @@ class LocalStorageService extends GetxService {
 
   void setReaderTtsPitch(double value) => _reader.put(kReaderTtsPitch, value);
 
-  double getReaderTtsVolume() => _reader.get(kReaderTtsVolume, defaultValue: 1.0);
+  double getReaderTtsVolume() =>
+      _reader.get(kReaderTtsVolume, defaultValue: 1.0);
 
   void setReaderTtsVolume(double value) => _reader.put(kReaderTtsVolume, value);
 
-bool getDevModeEnabled() => _setting.get(kDevModeEnabled, defaultValue: false);
+  bool getDevModeEnabled() =>
+      _setting.get(kDevModeEnabled, defaultValue: false);
 
-Future<void> setDevModeEnabled(bool value) async => _setting.put(kDevModeEnabled, value);
+  Future<void> setDevModeEnabled(bool value) async =>
+      _setting.put(kDevModeEnabled, value);
 
+  // Getter for Toggle
+  bool getUseFlareSolverr() {
+    // Default to false
+    return _setting.get(kUseFlareSolverr, defaultValue: false);
+  }
+
+  // Setter for Toggle
+  Future<void> setUseFlareSolverr(bool value) async {
+    await _setting.put(kUseFlareSolverr, value);
+  }
+
+  // Getter for URL
+  String getFlareSolverrUrl() {
+    // Default to localhost or empty
+    return _setting.get(
+      kFlareSolverrUrl,
+      defaultValue: "http://192.168.1.x:8191/",
+    );
+  }
+
+  // Setter for URL
+  Future<void> setFlareSolverrUrl(String url) async {
+    // Remove trailing slash if present to avoid double slashes later
+    if (url.endsWith('/')) {
+      url = url.substring(0, url.length - 1);
+    }
+    await _setting.put(kFlareSolverrUrl, url);
+  }
 }

@@ -39,14 +39,23 @@ class SettingPage extends StatelessWidget {
               return Text(str, style: kSettingSubtitleTextStyle);
             }),
             trailing: Icon(Icons.keyboard_arrow_down),
-            onTap:
-                () => showMenu(
+            onTap: () =>
+                showMenu(
                   context: context,
                   position: languageKey.currentContext!.getMenuPosition(),
                   items: [
-                    PopupMenuItem(value: Language.followSystem, child: Text("follow_system".tr)),
-                    PopupMenuItem(value: Language.simplifiedChinese, child: Text("简体中文")),
-                    PopupMenuItem(value: Language.traditionalChinese, child: Text("繁體中文")),
+                    PopupMenuItem(
+                      value: Language.followSystem,
+                      child: Text("follow_system".tr),
+                    ),
+                    PopupMenuItem(
+                      value: Language.simplifiedChinese,
+                      child: Text("简体中文"),
+                    ),
+                    PopupMenuItem(
+                      value: Language.traditionalChinese,
+                      child: Text("繁體中文"),
+                    ),
                   ],
                 ).then((value) async {
                   if (value != null) controller.changeLanguage(value);
@@ -69,9 +78,18 @@ class SettingPage extends StatelessWidget {
                 context: context,
                 position: themeModeKey.currentContext!.getMenuPosition(),
                 items: [
-                  PopupMenuItem(value: ThemeMode.system, child: Text("follow_system".tr)),
-                  PopupMenuItem(value: ThemeMode.light, child: Text("light_mode".tr)),
-                  PopupMenuItem(value: ThemeMode.dark, child: Text("dark_mode".tr)),
+                  PopupMenuItem(
+                    value: ThemeMode.system,
+                    child: Text("follow_system".tr),
+                  ),
+                  PopupMenuItem(
+                    value: ThemeMode.light,
+                    child: Text("light_mode".tr),
+                  ),
+                  PopupMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text("dark_mode".tr),
+                  ),
                 ],
               ).then((value) {
                 if (value == null) return;
@@ -82,8 +100,11 @@ class SettingPage extends StatelessWidget {
           Offstage(
             offstage: !Platform.isAndroid,
             child: Obx(
-                  () => SwitchListTile(
-                title: Text("dynamic_color_mode".tr, style: kSettingTitleTextStyle),
+              () => SwitchListTile(
+                title: Text(
+                  "dynamic_color_mode".tr,
+                  style: kSettingTitleTextStyle,
+                ),
                 value: controller.isDynamicColor.value,
                 onChanged: (value) => controller.changeIsDynamicColor(value),
               ),
@@ -93,7 +114,14 @@ class SettingPage extends StatelessWidget {
             offstage: controller.isDynamicColor.value && Platform.isAndroid,
             child: ListTile(
               title: Text("theme_color".tr, style: kSettingTitleTextStyle),
-              trailing: Obx(() => ColorIndicator(width: 20, height: 20,borderRadius: 100, color: controller.customColor.value)),
+              trailing: Obx(
+                () => ColorIndicator(
+                  width: 20,
+                  height: 20,
+                  borderRadius: 100,
+                  color: controller.customColor.value,
+                ),
+              ),
               onTap: () => _buildColorPickerDialog(context),
             ),
           ),
@@ -108,13 +136,19 @@ class SettingPage extends StatelessWidget {
               return Text(str, style: kSettingSubtitleTextStyle);
             }),
             trailing: Icon(Icons.keyboard_arrow_down),
-            onTap:
-                () => showMenu(
+            onTap: () =>
+                showMenu(
                   context: context,
                   position: nodeKey.currentContext!.getMenuPosition(),
                   items: [
-                    PopupMenuItem(value: Wenku8Node.wwwWenku8Net, child: Text("www.wenku8.net")),
-                    PopupMenuItem(value: Wenku8Node.wwwWenku8Cc, child: Text("www.wenku8.cc")),
+                    PopupMenuItem(
+                      value: Wenku8Node.wwwWenku8Net,
+                      child: Text("www.wenku8.net"),
+                    ),
+                    PopupMenuItem(
+                      value: Wenku8Node.wwwWenku8Cc,
+                      child: Text("www.wenku8.cc"),
+                    ),
                   ],
                 ).then((value) async {
                   if (value != null) controller.changeWenku8Node(value);
@@ -122,11 +156,40 @@ class SettingPage extends StatelessWidget {
           ),
           Obx(
             () => SwitchListTile(
+              title: Text(
+                "Use FlareSolverr (Bypass 403)",
+                style: kSettingTitleTextStyle,
+              ),
+              subtitle: Text(
+                "Use an external server to bypass Cloudflare.",
+                style: kSettingSubtitleTextStyle,
+              ),
+              value: controller.isUseFlareSolverr.value,
+              onChanged: (v) => controller.changeUseFlareSolverr(v),
+            ),
+          ),
+          Obx(() {
+            if (!controller.isUseFlareSolverr.value)
+              return const SizedBox.shrink();
+            return ListTile(
+              title: const Text("FlareSolverr URL"),
+              subtitle: Obx(() => Text(controller.flareSolverrUrl.value)),
+              trailing: const Icon(Icons.edit),
+              onTap: () => controller.editFlareSolverrUrl(context),
+            );
+          }),
+          Obx(
+            () => SwitchListTile(
               title: Text("relative_time".tr, style: kSettingTitleTextStyle),
               subtitle: Text(
                 "relative_time_tip".trParams({
-                  "relativeTime": Jiffy.parse(DateTime.now().toString()).fromNow().toString(),
-                  "normalTime": DateTime.now().toString().split('.')[0].toString(),
+                  "relativeTime": Jiffy.parse(
+                    DateTime.now().toString(),
+                  ).fromNow().toString(),
+                  "normalTime": DateTime.now()
+                      .toString()
+                      .split('.')[0]
+                      .toString(),
                 }),
                 style: kSettingSubtitleTextStyle,
               ),
@@ -136,7 +199,10 @@ class SettingPage extends StatelessWidget {
           ),
           Obx(
             () => SwitchListTile(
-              title: Text("auto_check_update".tr, style: kSettingTitleTextStyle),
+              title: Text(
+                "auto_check_update".tr,
+                style: kSettingTitleTextStyle,
+              ),
               value: controller.isAutoCheckUpdate.value,
               onChanged: (v) => controller.changeIsAutoCheckUpdate(v),
             ),
@@ -165,15 +231,22 @@ class SettingPage extends StatelessWidget {
         ColorPickerType.custom: true,
         ColorPickerType.wheel: false,
       },
-      pickerTypeLabels: <ColorPickerType, String>{ColorPickerType.primary: "theme_color".tr, ColorPickerType.wheel: "custom".tr},
+      pickerTypeLabels: <ColorPickerType, String>{
+        ColorPickerType.primary: "theme_color".tr,
+        ColorPickerType.wheel: "custom".tr,
+      },
       enableShadesSelection: false,
       actionButtons: ColorPickerActionButtons(
         dialogOkButtonLabel: "save".tr,
         dialogCancelButtonLabel: "cancel".tr,
       ),
-      copyPasteBehavior: ColorPickerCopyPasteBehavior().copyWith(copyFormat: ColorPickerCopyFormat.hexRRGGBB),
+      copyPasteBehavior: ColorPickerCopyPasteBehavior().copyWith(
+        copyFormat: ColorPickerCopyFormat.hexRRGGBB,
+      ),
     );
     if (newColor == initColor) return;
     controller.changeCustomColor(newColor);
   }
+
+  // moved dialog logic into controller: SettingController.editFlareSolverrUrl
 }
