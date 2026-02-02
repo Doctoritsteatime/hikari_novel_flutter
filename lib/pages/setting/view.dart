@@ -178,6 +178,42 @@ class SettingPage extends StatelessWidget {
               onTap: () => controller.editFlareSolverrUrl(context),
             );
           }),
+          Obx(() {
+            if (!controller.isUseFlareSolverr.value)
+              return const SizedBox.shrink();
+            return ListTile(
+              title: const Text("FlareSolverr Session ID"),
+              subtitle: Obx(
+                () => Text(
+                  controller.flareSolverrSessionId.value.isEmpty
+                      ? "(none)"
+                      : controller.flareSolverrSessionId.value,
+                ),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () =>
+                        controller.editFlareSolverrSessionId(context),
+                    icon: Icon(Icons.edit),
+                  ),
+                ],
+              ),
+            );
+          }),
+          Obx(() {
+            if (!controller.isUseFlareSolverr.value)
+              return const SizedBox.shrink();
+            if (controller.flareSolverrSessionId.value.trim().isEmpty)
+              return const SizedBox.shrink();
+            return ListTile(
+              title: const Text("Destroy FlareSolverr Session"),
+              subtitle: const Text("Send sessions.destroy to FlareSolverr"),
+              trailing: Icon(Icons.delete_forever),
+              onTap: () => controller.destroyFlareSolverrSession(context),
+            );
+          }),
           Obx(
             () => SwitchListTile(
               title: Text("relative_time".tr, style: kSettingTitleTextStyle),

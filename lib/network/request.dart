@@ -294,6 +294,18 @@ class Request {
       'maxTimeout': 60000,
     };
 
+    // If a session ID is configured, ensure the session exists and attach it
+    // to the request payload so FlareSolverr will reuse the browser instance.
+    final sessionId = LocalStorageService.instance.getFlareSolverrSessionId();
+    if (sessionId.trim().isNotEmpty) {
+      try {
+        await _ensureFlareSession(sessionId);
+        payload['session'] = sessionId;
+      } catch (e) {
+        Log.e('Failed to ensure FlareSolverr session: $e');
+      }
+    }
+
     // Attach cookies from local storage to the FlareSolverr request so the headless
     // browser will include them when loading the page.
     final cookieStr = LocalStorageService.instance.getCookie();
@@ -376,6 +388,63 @@ class Request {
       }
     } else {
       throw Exception('FlareSolverr error: ${map['message'] ?? map['status']}');
+    }
+  }
+
+  // Ensure a named session exists in FlareSolverr; create it if missing.
+  static Future<void> _ensureFlareSession(String sessionId) async {
+    final flareUrl = LocalStorageService.instance.getFlareSolverrUrl();
+    try {
+      final listPayload = {'cmd': 'sessions.list'};
+      final resp = await dio.post(
+        flareUrl,
+        data: jsonEncode(listPayload),
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+      dynamic data = resp.data;
+      Map<String, dynamic>? map;
+      if (data is Map)
+        map = Map<String, dynamic>.from(data);
+      else if (data is String)
+        map = jsonDecode(data) as Map<String, dynamic>?;
+      else if (data is Uint8List || data is List<int>) {
+        final text = utf8.decode(data as List<int>, allowMalformed: true);
+        map = jsonDecode(text) as Map<String, dynamic>?;
+      }
+
+      if (map != null && map['sessions'] is List) {
+        final sessions = (map['sessions'] as List)
+            .map((e) => e.toString())
+            .toList();
+        if (sessions.contains(sessionId)) return;
+      }
+
+      // create session
+      final createPayload = {'cmd': 'sessions.create', 'session': sessionId};
+      await dio.post(
+        flareUrl,
+        data: jsonEncode(createPayload),
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+    } catch (e) {
+      Log.e('FlareSolverr sessions.ensure error: $e');
+      // swallow: fallback to non-session requests
+    }
+  }
+
+  // Destroy a named FlareSolverr session.
+  static Future<void> destroyFlareSession(String sessionId) async {
+    final flareUrl = LocalStorageService.instance.getFlareSolverrUrl();
+    try {
+      final payload = {'cmd': 'sessions.destroy', 'session': sessionId};
+      await dio.post(
+        flareUrl,
+        data: jsonEncode(payload),
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+    } catch (e) {
+      Log.e('FlareSolverr sessions.destroy error: $e');
+      rethrow;
     }
   }
 }

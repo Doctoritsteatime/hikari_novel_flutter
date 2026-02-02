@@ -4,6 +4,7 @@ import 'package:hikari_novel_flutter/models/common/language.dart';
 import 'package:hikari_novel_flutter/models/common/wenku8_node.dart';
 
 import '../../service/local_storage_service.dart';
+import '../../network/request.dart';
 
 class SettingController extends GetxController {
   RxBool isAutoCheckUpdate = LocalStorageService.instance
@@ -20,6 +21,9 @@ class SettingController extends GetxController {
       .obs;
   RxString flareSolverrUrl = LocalStorageService.instance
       .getFlareSolverrUrl()
+      .obs;
+  RxString flareSolverrSessionId = LocalStorageService.instance
+      .getFlareSolverrSessionId()
       .obs;
   void changeIsAutoCheckUpdate(bool enabled) {
     isAutoCheckUpdate.value = enabled;
@@ -119,6 +123,62 @@ class SettingController extends GetxController {
 
     if (result != null) {
       flareSolverrUrl.value = result;
+    }
+  }
+
+  Future<void> editFlareSolverrSessionId(BuildContext context) async {
+    final TextEditingController textController = TextEditingController(
+      text: LocalStorageService.instance.getFlareSolverrSessionId(),
+    );
+
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("FlareSolverr Session ID"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Enter a session ID to reuse a persistent FlareSolverr session (leave empty for temporary sessions).",
+              ),
+              TextField(controller: textController),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                final id = textController.text;
+                await LocalStorageService.instance.setFlareSolverrSessionId(id);
+                Navigator.pop(context, id);
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != null) {
+      flareSolverrSessionId.value = result;
+    }
+  }
+
+  Future<void> destroyFlareSolverrSession(BuildContext context) async {
+    final id = flareSolverrSessionId.value;
+    if (id.trim().isEmpty) {
+      Get.snackbar('Error', 'No session ID configured');
+      return;
+    }
+    try {
+      await Request.destroyFlareSession(id);
+      Get.snackbar('Success', 'Session destroyed');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to destroy session: $e');
     }
   }
 }

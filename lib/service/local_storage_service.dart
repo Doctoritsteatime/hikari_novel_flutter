@@ -59,7 +59,8 @@ class LocalStorageService extends GetxService {
       kReaderTtsPitch = "readerTtsPitch",
       kReaderTtsVolume = "readerTtsVolume",
       kUseFlareSolverr = 'use_flaresolverr',
-      kFlareSolverrUrl = 'flaresolverr_url';
+      kFlareSolverrUrl = 'flaresolverr_url',
+      kFlareSolverrSessionId = 'flaresolverr_session_id';
 
   Future<void> init() async {
     final Directory dir = await getApplicationSupportDirectory();
@@ -322,6 +323,15 @@ class LocalStorageService extends GetxService {
       kFlareSolverrUrl,
       defaultValue: "http://192.168.1.x:8191/",
     );
+  }
+
+  // Getter/Setter for session id
+  String getFlareSolverrSessionId() {
+    return _setting.get(kFlareSolverrSessionId, defaultValue: "");
+  }
+
+  Future<void> setFlareSolverrSessionId(String sessionId) async {
+    await _setting.put(kFlareSolverrSessionId, sessionId);
   }
 
   // Setter for URL
