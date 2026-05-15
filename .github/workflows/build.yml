@@ -1,5 +1,9 @@
 name: CI
 on:
+    workflow_dispatch:
+        branches:
+            - main
+            - release
     push:
         branches:
             - main
