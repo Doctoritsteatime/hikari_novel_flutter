@@ -32,9 +32,9 @@ jobs:
             # - run: flutter test
 
     build_ios_without_signing:
-      name: Build Flutter (iOS) Without Signing
-      needs: [flutter_test]
-      runs-on: macos-14
+        name: Build Flutter (iOS) Without Signing
+        needs: [flutter_test]
+        runs-on: macos-14
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
