@@ -19,11 +19,11 @@ jobs:
         name: Run flutter test and analyze
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-java@v1
+            - uses: actions/checkout@v4
+            - uses: actions/setup-java@v4
               with:
-                  java-version: "12.x"
-            - uses: subosito/flutter-action@v1
+                  java-version: "11"
+            - uses: subosito/flutter-action@v2
               with:
                   channel: "stable"
             - run: flutter pub get
@@ -36,7 +36,7 @@ jobs:
         runs-on: macos-latest
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
               # From github documentation
             - name: Install Firebase google services
               env:
@@ -47,11 +47,11 @@ jobs:
                   # import google services from secrets
                   echo -n "$APPLE_GOOGLE_SERVICES_BASE64" | base64 --decode --output $SERVICES_PATH
             - name: Setup Java
-              uses: actions/setup-java@v1
+              uses: actions/setup-java@v4
               with:
-                  java-version: "12.x"
+                  java-version: "11"
             - name: Setup Flutter
-              uses: subosito/flutter-action@v1
+              uses: subosito/flutter-action@v2
               with:
                   channel: "stable"
             - run: flutter pub get
@@ -68,7 +68,7 @@ jobs:
                   cd ..
                   zip -r bookadapt_unsigned.ipa Payload
             - name: Upload IPA
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v4
               with:
                   name: ios_ipa
                   path: build/ios/iphoneos/*.ipa
@@ -79,7 +79,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Install Firebase google services
               env:
                   ANDROID_GOOGLE_SERVICES_BASE64: ${{ secrets.ANDROID_GOOGLE_SERVICES_BASE64 }}
@@ -89,11 +89,11 @@ jobs:
                   # import google services from secrets
                   echo -n "$ANDROID_GOOGLE_SERVICES_BASE64" | base64 --decode > $SERVICES_PATH
             - name: Setup Java
-              uses: actions/setup-java@v1
+              uses: actions/setup-java@v4
               with:
-                  java-version: "12.x"
+                  java-version: "11"
             - name: Setup Flutter
-              uses: subosito/flutter-action@v1
+              uses: subosito/flutter-action@v2
               with:
                   channel: "stable"
             - run: flutter pub get
@@ -101,7 +101,7 @@ jobs:
             - name: Build Android AppBundle
               run: flutter build appbundle --release
             - name: Upload appbundle
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v4
               with:
                   name: android_appbundle
                   path: build/app/outputs/bundle/release/app-release.aab
@@ -112,7 +112,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Install Firebase google services
               env:
                   ANDROID_GOOGLE_SERVICES_BASE64: ${{ secrets.ANDROID_GOOGLE_SERVICES_BASE64 }}
@@ -122,11 +122,11 @@ jobs:
                   # import google services from secrets
                   echo -n "$ANDROID_GOOGLE_SERVICES_BASE64" | base64 --decode > $SERVICES_PATH
             - name: Setup Java
-              uses: actions/setup-java@v1
+              uses: actions/setup-java@v4
               with:
-                  java-version: "12.x"
+                  java-version: "11"
             - name: Setup Flutter
-              uses: subosito/flutter-action@v1
+              uses: subosito/flutter-action@v2
               with:
                   channel: "stable"
             - run: flutter pub get
@@ -134,7 +134,7 @@ jobs:
             - name: Build Android APK
               run: flutter build apk --release
             - name: Upload apk
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v4
               with:
                   name: android_apk
                   path: build/app/outputs/flutter-apk/app-release.apk
