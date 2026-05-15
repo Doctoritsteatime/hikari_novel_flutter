@@ -24,7 +24,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
 
   # 设备信息
-  device_info_plus: ^12.3.0
+  device_info_plus: 12.3.0
 
   # 动态取色
   dynamic_color: ^1.7.0
